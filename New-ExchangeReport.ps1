@@ -158,10 +158,16 @@ $Subject = ($reportsettings | Where-Object {$_.Setting -eq "Subject"}).Value
 [int]$DisplayTop = ($reportsettings | Where-Object {$_.Setting -eq "DisplayTop"}).Value
 $language = ($languagesettings | Where-Object {$_.Setting -eq "Language"}).Value
 $HTTPProxy = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxy"}).Value
+$HTTPProxyAddress = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxyAddress"}).Value
+$HTTPProxyAuth = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxyAuth"}).Value
 
-if ($HTTPProxy -match "yes")
+if ($HTTPProxyAuth -match "yes")
 	{
- 		$HTTPProxyAddress = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxyAddress"}).Value
+ 		$HTTPProxyUser = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxyUser"}).Value
+   		$HTTPProxyPass = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxyPass"}).Value
+
+     		$proxysecpasswd = ConvertTo-SecureString $HTTPProxyPass -AsPlainText -Force
+       		$HTTPProxyCred = New-Object System.Management.Automation.PSCredential ($HTTPProxyUser, $proxysecpasswd)
 	}
 
 # Errorlog schreiben
