@@ -11,7 +11,7 @@ if (($HTTPProxy -match "yes") -and ($HTTPProxyAuth -match "yes")){
 }
 
 #Run HealthChecker Script
-$ExecuteHealthChecker = Get-ExchangeServer | ?{$_.AdminDisplayVersion -Match "^Version 15"} | %{. "$installpath\Modules\3rdParty\HealthChecker.ps1" -Server $_.Name -OutputFilePath $tmpdir} | Remove-WriteConsole
+$ExecuteHealthChecker = Get-ExchangeServer | Where-Object {$_.AdminDisplayVersion -Match "^Version 15"} | Foreach-Object {. "$installpath\Modules\3rdParty\HealthChecker.ps1" -Server $_.Name -OutputFilePath $tmpdir} | Remove-WriteConsole
 
 #Get HealthChecker XMLs
 $HealthCheckerXMLs = Get-ChildItem "$tmpdir\HealthCheck*.xml" | foreach {$_.fullname}
