@@ -1,7 +1,14 @@
 $healthreport = Generate-ReportHeader "HealthChecker.png" "$l_health_header"
+$HealthCheckerURI = "https://github.com/microsoft/CSS-Exchange/releases/latest/download/HealthChecker.ps1"
 
 #Download HealthChecker
-invoke-webrequest -Uri "https://github.com/microsoft/CSS-Exchange/releases/latest/download/HealthChecker.ps1" -outfile "$installpath\Modules\3rdParty\HealthChecker.ps1"
+if (($HTTPProxy -match "yes") -and ($HTTPProxyAuth -match "yes")){
+	Invoke-WebRequest -Uri $HealthCheckerURI -outfile "$installpath\Modules\3rdParty\HealthChecker.ps1" -Proxy $HTTPProxyAddress -ProxyCredential $HTTPProxyCred
+} elseif (($HTTPProxy -match "yes") -and ($HTTPProxyAuth -notmatch "yes")) {
+	Invoke-WebRequest -Uri $HealthCheckerURI -outfile "$installpath\Modules\3rdParty\HealthChecker.ps1" -Proxy $HTTPProxyAddress
+} else {
+	Invoke-WebRequest -Uri $HealthCheckerURI -outfile "$installpath\Modules\3rdParty\HealthChecker.ps1"
+}
 
 #Run HealthChecker Script
 $ExecuteHealthChecker = Get-ExchangeServer | ?{$_.AdminDisplayVersion -Match "^Version 15"} | %{. "$installpath\Modules\3rdParty\HealthChecker.ps1" -Server $_.Name -OutputFilePath $tmpdir} | Remove-WriteConsole
