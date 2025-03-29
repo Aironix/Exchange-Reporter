@@ -50,7 +50,7 @@ write-host "
 
 ------------------------------------------------------------------------------------------
 "
-#Pr¸fen ob PowerShell 4.0 vorhanden
+#Pr√ºfen ob PowerShell 4.0 vorhanden
 #--------------------------------------------------------------------------------------
 
 write-host " Checking Powershell Version:" -nonewline
@@ -157,6 +157,12 @@ $Mailserver = ($reportsettings | Where-Object {$_.Setting -eq "Mailserver"}).Val
 $Subject = ($reportsettings | Where-Object {$_.Setting -eq "Subject"}).Value
 [int]$DisplayTop = ($reportsettings | Where-Object {$_.Setting -eq "DisplayTop"}).Value
 $language = ($languagesettings | Where-Object {$_.Setting -eq "Language"}).Value
+$HTTPProxy = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxy"}).Value
+
+if ($HTTPProxy -match "yes")
+	{
+ 		$HTTPProxyAddress = ($reportsettings | Where-Object {$_.Setting -eq "HTTPProxyAddress"}).Value
+	}
 
 # Errorlog schreiben
 #--------------------------------------------------------------------------------------    
@@ -263,7 +269,7 @@ $origpos.X = 70
 			write-host ""
 		}
 
-#Tempor‰res Verzeichnis erstellen
+#Tempor√§res Verzeichnis erstellen
 #--------------------------------------------------------------------------------------
 
 write-host " Generating temp. Directory:" -nonewline
@@ -315,7 +321,7 @@ Catch
 		write-host ""
  }
  
-#H‰ufig genutzte Variablen
+#H√§ufig genutzte Variablen
 #--------------------------------------------------------------------------------------
 write-host " Loading global Variables:" -nonewline
 $origpos = $host.UI.RawUI.CursorPosition
@@ -575,7 +581,7 @@ if ($FTPUpload -match "yes")
 			}		
 	}
 
-# Aufr‰umen
+# Aufr√§umen
 #--------------------------------------------------------------------------------------
 if ($CleanTMPFolder -match "yes")
 	{
